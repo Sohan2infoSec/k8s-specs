@@ -1,11 +1,16 @@
 # vi: set ft=ruby :
  
 Vagrant.configure("2") do |config|
+    config.vm.provider "virtualbox" do |v|
+      v.cpus = 1
+    end
+      
     config.vm.box = "ubuntu/xenial64"
+    config.vm.network "forwarded_port", guest: 22, host: 2223
 
     config.vm.define "docker-build" do |node|
       node.vm.hostname = "docker-build"
-      node.vm.network :private_network, ip: "10.100.198.200"
+      #node.vm.network :private_network, ip: "10.100.198.200"
       node.vm.provision :shell, inline: "sudo apt update"
       node.vm.provision :shell, inline: "sudo apt -y install apt-transport-https ca-certificates curl software-properties-common"
       node.vm.provision :shell, inline: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"

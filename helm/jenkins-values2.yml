@@ -1,23 +1,26 @@
 # helm install stable/jenkins --name jenkins --namespace jenkins --values helm/jenkins-values --set master.hostName=...
 master:
-  tag: "2.204.1-alpine"
+  #tag: "2.204.1-alpine"
+  tag: "2.303.3-alpine"
   cpu: "500m"
   memory: "500Mi"
   serviceType: ClusterIP
   serviceAnnotations:
     service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
   installPlugins:
-  - durable-task:1.33
-  - workflow-durable-task-step:2.35
-  - blueocean:1.21.0
-  - credentials:2.3.0
+  - durable-task:1.39
+  - workflow-durable-task-step:2.40
+  - blueocean:1.25.1
+  #- credentials:2.3.0
+  - credentials:2.6.1
   - ec2:1.47
-  - git:4.0.0
-  - git-client:3.0.0
-  - github:1.29.5
-  - kubernetes:1.22.3
-  - pipeline-utility-steps:2.3.1
-  - pipeline-model-definition:1.5.0
+  - git:4.10.0
+  - git-client:3.10.0
+  - github:1.34.1
+  #- kubernetes:1.22.3
+  - kubernetes:1.30.10
+  - pipeline-utility-steps:2.10.0
+  - pipeline-model-definition:1.9.2
   - slack:2.35
   - thinBackup:1.9
   - workflow-aggregator:2.6
