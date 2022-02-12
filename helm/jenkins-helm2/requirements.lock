@@ -1,0 +1,6 @@
+dependencies:
+- name: jenkins
+  repository: https://charts.helm.sh/stable
+  version: 2.5.4
+digest: sha256:00cb43365a1b0ee6969fd563eb1dddad0e953b50032f59bdd7a99c571cbd8c31
+generated: "2022-01-31T23:44:03.547597258+07:00"

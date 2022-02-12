@@ -104,108 +104,6 @@ data:
           <connectTimeout>0</connectTimeout>
           <readTimeout>0</readTimeout>
         </org.csanchez.jenkins.plugins.kubernetes.KubernetesCloud>
-{{- if .Values.master.DockerAMI }}
-        <hudson.plugins.ec2.EC2Cloud plugin="ec2@1.39">
-          <name>ec2-docker-agents</name>
-          <useInstanceProfileForCredentials>false</useInstanceProfileForCredentials>
-          <credentialsId>aws</credentialsId>
-          <privateKey>
-            <privateKey></privateKey>
-          </privateKey>
-          <instanceCap>2147483647</instanceCap>
-          <templates>
-            <hudson.plugins.ec2.SlaveTemplate>
-              <ami>{{.Values.master.DockerAMI}}</ami>
-              <description>docker</description>
-              <zone></zone>
-              <securityGroups>docker</securityGroups>
-              <remoteFS></remoteFS>
-              <type>T2Micro</type>
-              <ebsOptimized>false</ebsOptimized>
-              <labels>docker</labels>
-              <mode>NORMAL</mode>
-              <initScript></initScript>
-              <tmpDir></tmpDir>
-              <userData></userData>
-              <numExecutors></numExecutors>
-              <remoteAdmin>ubuntu</remoteAdmin>
-              <jvmopts></jvmopts>
-              <subnetId></subnetId>
-              <idleTerminationMinutes>10</idleTerminationMinutes>
-              <iamInstanceProfile></iamInstanceProfile>
-              <deleteRootOnTermination>false</deleteRootOnTermination>
-              <useEphemeralDevices>false</useEphemeralDevices>
-              <customDeviceMapping></customDeviceMapping>
-              <instanceCap>2147483647</instanceCap>
-              <stopOnTerminate>false</stopOnTerminate>
-              <usePrivateDnsName>false</usePrivateDnsName>
-              <associatePublicIp>false</associatePublicIp>
-              <useDedicatedTenancy>false</useDedicatedTenancy>
-              <amiType class="hudson.plugins.ec2.UnixData">
-                <rootCommandPrefix></rootCommandPrefix>
-                <slaveCommandPrefix></slaveCommandPrefix>
-                <sshPort>22</sshPort>
-              </amiType>
-              <launchTimeout>2147483647</launchTimeout>
-              <connectBySSHProcess>false</connectBySSHProcess>
-              <connectUsingPublicIp>false</connectUsingPublicIp>
-            </hudson.plugins.ec2.SlaveTemplate>
-          </templates>
-          <region>us-east-2</region>
-        </hudson.plugins.ec2.EC2Cloud>
-{{- end }}
-{{- if .Values.master.GProject }}
-        <com.google.jenkins.plugins.computeengine.ComputeEngineCloud plugin="google-compute-engine@1.0.4">
-          <name>gce-docker</name>
-          <instanceCap>2147483647</instanceCap>
-          <projectId>{{.Values.master.GProject}}</projectId>
-          <credentialsId>{{.Values.master.GProject}}</credentialsId>
-          <configurations>
-            <com.google.jenkins.plugins.computeengine.InstanceConfiguration>
-              <description>Docker build instances</description>
-              <namePrefix>docker</namePrefix>
-              <region>https://www.googleapis.com/compute/v1/projects/{{.Values.master.GProject}}/regions/us-east1</region>
-              <zone>https://www.googleapis.com/compute/v1/projects/{{.Values.master.GProject}}/zones/us-east1-b</zone>
-              <machineType>https://www.googleapis.com/compute/v1/projects/{{.Values.master.GProject}}/zones/us-east1-b/machineTypes/n1-standard-2</machineType>
-              <numExecutorsStr>1</numExecutorsStr>
-              <startupScript></startupScript>
-              <preemptible>false</preemptible>
-              <labels>docker ubuntu linux</labels>
-              <runAsUser>jenkins</runAsUser>
-              <bootDiskType>https://www.googleapis.com/compute/v1/projects/{{.Values.master.GProject}}/zones/us-east1-b/diskTypes/pd-ssd</bootDiskType>
-              <bootDiskAutoDelete>true</bootDiskAutoDelete>
-              <bootDiskSourceImageName>https://www.googleapis.com/compute/v1/projects/{{.Values.master.GProject}}/global/images/docker</bootDiskSourceImageName>
-              <bootDiskSourceImageProject>{{.Values.master.GProject}}</bootDiskSourceImageProject>
-              <networkConfiguration class="com.google.jenkins.plugins.computeengine.AutofilledNetworkConfiguration">
-                <network>https://www.googleapis.com/compute/v1/projects/{{.Values.master.GProject}}/global/networks/default</network>
-                <subnetwork>default</subnetwork>
-              </networkConfiguration>
-              <externalAddress>true</externalAddress>
-              <useInternalAddress>true</useInternalAddress>
-              <networkTags></networkTags>
-              <serviceAccountEmail></serviceAccountEmail>
-              <mode>NORMAL</mode>
-              <retentionTimeMinutesStr>6</retentionTimeMinutesStr>
-              <launchTimeoutSecondsStr>300</launchTimeoutSecondsStr>
-              <bootDiskSizeGbStr>10</bootDiskSizeGbStr>
-              <googleLabels>
-                <entry>
-                  <string>jenkins_cloud_id</string>
-                  <string>-1723728540</string>
-                </entry>
-                <entry>
-                  <string>jenkins_config_name</string>
-                  <string>docker</string>
-                </entry>
-              </googleLabels>
-              <numExecutors>1</numExecutors>
-              <retentionTimeMinutes>6</retentionTimeMinutes>
-              <launchTimeoutSeconds>300</launchTimeoutSeconds>
-              <bootDiskSizeGb>10</bootDiskSizeGb>
-            </com.google.jenkins.plugins.computeengine.InstanceConfiguration>
-          </configurations>
-        </com.google.jenkins.plugins.computeengine.ComputeEngineCloud>
-{{- end }}
       </clouds>
       <quietPeriod>5</quietPeriod>
       <scmCheckoutRetryCount>0</scmCheckoutRetryCount>
@@ -264,15 +162,16 @@ data:
       <numExecutors>2</numExecutors>
       <mode>NORMAL</mode>
       <retentionStrategy class="hudson.slaves.RetentionStrategy$Always"/>
-      <launcher class="hudson.plugins.sshslaves.SSHLauncher" plugin="ssh-slaves@1.26">
-        <host>10.100.198.200</host>
+      <launcher class="hudson.plugins.sshslaves.SSHLauncher" plugin="ssh-slaves@1.31.0">
+        <host>61.28.237.3</host>
         <port>22</port>
         <credentialsId>docker-build</credentialsId>
-        <maxNumRetries>0</maxNumRetries>
-        <retryWaitTime>0</retryWaitTime>
+        <maxNumRetries>10</maxNumRetries>
+        <retryWaitTime>15</retryWaitTime>
         <sshHostKeyVerificationStrategy class="hudson.plugins.sshslaves.verifiers.NonVerifyingKeyVerificationStrategy"/>
+        <tcpNoDelay>true</tcpNoDelay>
       </launcher>
-      <label>docker ubuntu</label>
+      <label>docker ubuntu linux</label>
       <nodeProperties/>
     </slave>
 {{- end }}

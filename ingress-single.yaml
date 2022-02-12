@@ -1,0 +1,9 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-single
+spec:
+  backend:
+    serviceName: nginx-single
+    servicePort: 80

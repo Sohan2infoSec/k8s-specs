@@ -9,14 +9,17 @@ data:
     <?xml version='1.0' encoding='UTF-8'?>
     <hudson>
       <disabledAdministrativeMonitors/>
-      <version>{{ .Values.master.imageTag }}</version>
-      <numExecutors>0</numExecutors>
+      <version>{{ .Values.master.tag }}</version>
+      <numExecutors>2</numExecutors>
       <mode>NORMAL</mode>
       <useSecurity>{{ .Values.master.useSecurity }}</useSecurity>
+      <securityRealm class="hudson.security.HudsonPrivateSecurityRealm">
+        <disableSignup>true</disableSignup>
+        <enableCaptcha>false</enableCaptcha>
+      </securityRealm>
       <authorizationStrategy class="hudson.security.FullControlOnceLoggedInAuthorizationStrategy">
-        <denyAnonymousReadAccess>true</denyAnonymousReadAccess>
+        <denyAnonymousReadAccess>false</denyAnonymousReadAccess>
       </authorizationStrategy>
-      <securityRealm class="hudson.security.LegacySecurityRealm"/>
       <disableRememberMe>false</disableRememberMe>
       <projectNamingStrategy class="jenkins.model.ProjectNamingStrategy$DefaultProjectNamingStrategy"/>
       <workspaceDir>${JENKINS_HOME}/workspace/${ITEM_FULLNAME}</workspaceDir>
@@ -56,7 +59,7 @@ data:
               <containers>
                 <org.csanchez.jenkins.plugins.kubernetes.ContainerTemplate>
                   <name>jnlp</name>
-                  <image>{{ .Values.agent.image }}:{{ .Values.agent.imageTag }}</image>
+                  <image>{{ .Values.agent.image }}:{{ .Values.agent.tag }}</image>
 {{- if .Values.agent.privileged }}
                   <privileged>true</privileged>
 {{- else }}
@@ -165,7 +168,7 @@ data:
       <launcher class="hudson.plugins.sshslaves.SSHLauncher" plugin="ssh-slaves@1.31.0">
         <host>61.28.237.3</host>
         <port>22</port>
-        <credentialsId>docker-build</credentialsId>
+        <credentialsId>snn-buil</credentialsId>
         <maxNumRetries>10</maxNumRetries>
         <retryWaitTime>15</retryWaitTime>
         <sshHostKeyVerificationStrategy class="hudson.plugins.sshslaves.verifiers.NonVerifyingKeyVerificationStrategy"/>
