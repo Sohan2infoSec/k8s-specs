@@ -90,4 +90,4 @@ alertmanagerFiles:
         send_resolved: true
         title: "{{ .CommonAnnotations.summary }}-snn-8k"
         text: "{{ .CommonAnnotations.description }}"
-        title_link: http://my-prometheus.com/alerts
+        title_link: "http://mon.61.28.237.69.nip.io/alerts"
